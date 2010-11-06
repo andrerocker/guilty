@@ -30,7 +30,9 @@ public class GuiltyHttp
 	public InputStream obtemPaginaManga(String manga, String page) throws Exception
 	{
 		String url = String.format(urlPagina, manga, page);
-		String bypass = String.format(bypassUrl, manga, util.extractEdicao(page));
+		String bypass = String.format(bypassUrl, manga, util.extractEdicao(manga, page));
+		System.out.println("Url: "+url+" bypass:"+bypass);
+		
 		
 		GetMethod request = new GetMethod(url); 
 		request.addRequestHeader("Referer", bypass);

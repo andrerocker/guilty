@@ -30,9 +30,9 @@ public class GuiltyUtil
 		return frag.substring(0, frag.indexOf("\""));
 	}
 	
-	public String extractEdicao(String page)
+	public String extractEdicao(String manga, String page)
 	{
-		String frag = page.substring("naruto".length());
-		return frag.substring(frag.lastIndexOf("-"));
+		String frag = page.substring(manga.length());
+		return frag.substring(0, frag.lastIndexOf("-"));
 	}
 }
