@@ -13,33 +13,31 @@ import java.util.List;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 
-public class Test 
+public class Guilty 
 {
 	private HttpClient http = new HttpClient();
+	private String pageUrlTemplate = "http://74.222.1.191/cdm/%s/%s";
+	private String indexPagesUrlTemplate = "http://74.222.1.191/cdm/%s/";
+	private String bypassUrlTemplate = "http://centraldemangas.com.br/online/%s/%s";
 	
 	public static void main(String[] args) throws Exception
 	{
-		Test teste = new Test();
-		teste.downlaod();
-		//teste.requestMangaPage("http://74.222.1.191/cdm/naruto/naruto001-01.jpg");
-		System.out.println("OK");
+		Guilty teste = new Guilty();
+		teste.download("naruto");
 	}
 
-	private void downlaod() throws Exception
+	private void download(String manga) throws Exception
 	{
-		String manga = "naruto";
-		String url = "http://74.222.1.191/cdm/naruto/%s";
-		
 		for(String page: obtemListaPaginas(manga))
 		{
 			System.out.println("Processando pagina: "+page);
-			requestMangaPage(page, String.format(url, page));
+			requestMangaPage(manga, page, String.format(pageUrlTemplate, manga, page));
 		}
 	}
 	
-	private File request(String mangaName) throws Exception
+	private File request(String manga) throws Exception
 	{
-		GetMethod get = new GetMethod(String.format("http://74.222.1.191/cdm/%s/", mangaName));
+		GetMethod get = new GetMethod(String.format(indexPagesUrlTemplate, manga));
 		http.executeMethod(get);
 		
 		File temp = File.createTempFile("guilty", "txt");
@@ -50,12 +48,11 @@ public class Test
 		return temp;
 	}
 	
-	private void requestMangaPage(String page, String url)
+	private void requestMangaPage(String manga, String page, String url)
 	{
 		try 
 		{
-			GetMethod mangaPage = new GetMethod(url);
-			mangaPage.addRequestHeader("Referer", String.format("http://centraldemangas.com.br/online/Naruto/%s", extractEdicao(page))); //FIX: O Pulo do Gato :P 
+			GetMethod mangaPage = bypass(manga, page, new GetMethod(url));
 			http.executeMethod(mangaPage);
 			
 			store(mangaPage.getResponseBodyAsStream(), new File(page));
@@ -64,6 +61,13 @@ public class Test
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	private GetMethod bypass(String manga, String page, GetMethod method)
+	{
+		//FIX: O Pulo do Gato :P
+		method.addRequestHeader("Referer", String.format(bypassUrlTemplate, manga, extractEdicao(page))); 
+		return method;
 	}
 	
 	private void store(InputStream input, File file)
