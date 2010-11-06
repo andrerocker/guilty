@@ -2,7 +2,6 @@ A ideia eh desenvolver um utilitario que facilitara a vida do publico que
 acessa o centraldemangas.com.br realizando o download automatico de todos
 os episodios dos mangas que o site disponibiliza.
 
-- Adicionar Pool de Thread / Download de paginas paralelas.
 - Implementa/Melhorar interface com usuario.
 - Implementar listagem de mangas disponiveis.
 - Implementar build de jar executavel 

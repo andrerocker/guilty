@@ -2,9 +2,12 @@ package guilty.manager;
 
 
 import guilty.manager.http.GuiltyHttp;
+import guilty.manager.thread.GuiltyWorker;
 import guilty.manager.util.GuiltyUtil;
 
 import java.io.File;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class GuiltyManager 
 {
@@ -18,10 +21,11 @@ public class GuiltyManager
 	
 	public void downloadManga(String manga) throws Exception
 	{
+		ExecutorService executor = Executors.newFixedThreadPool(10);
+		
 		for(String page: http.todasPaginasManga(manga))
-		{
-			System.out.println("Processando pagina: "+page);
-			processMangaPage(manga, page);
-		}	
+			executor.execute(new GuiltyWorker(this, manga, page));
+		
+		executor.shutdown();
 	}
 }
