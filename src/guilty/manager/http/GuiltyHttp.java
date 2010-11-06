@@ -31,8 +31,6 @@ public class GuiltyHttp
 	{
 		String url = String.format(urlPagina, manga, page);
 		String bypass = String.format(bypassUrl, manga, util.extractEdicao(manga, page));
-		System.out.println("Url: "+url+" bypass:"+bypass);
-		
 		
 		GetMethod request = new GetMethod(url); 
 		request.addRequestHeader("Referer", bypass);
